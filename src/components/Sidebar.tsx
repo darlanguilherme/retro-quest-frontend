@@ -18,6 +18,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
+import UserProfileCard from './ProfileCard';
 
 const drawerWidth = 240;
 
@@ -130,9 +131,10 @@ export default function PersistentDrawerLeft() {
                 open={open}
             >
                 <DrawerHeader>
-                    <Typography variant="h6" noWrap component="div" style={{'backgroundColor':'red'}}>
+                    <Typography variant="h6" noWrap component="div" style={{ 'backgroundColor': 'red' }}>
                         RetroQuest
                     </Typography>
+                    
                     {/* <IconButton onClick={handleDrawerClose}>
                         {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
                     </IconButton> */}

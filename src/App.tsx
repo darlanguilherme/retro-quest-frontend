@@ -8,17 +8,17 @@ import { AuthProvider } from './context/AuthProvider'; // Adicione o caminho cor
 
 const App: React.FC = () => {
   return (
-    <AuthProvider>
+    // <AuthProvider>
       <Router>
         <Routes>
           <Route path="/login" element={<Login />} />
-          <Route element={<PrivateRoute />}>
+          {/* <Route element={<PrivateRoute />}> */}
             <Route path="/" element={<Main />} />
-          </Route>
+          {/* </Route> */}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
-    </AuthProvider>
+    // </AuthProvider>
   );
 };
 

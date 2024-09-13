@@ -14,8 +14,11 @@ import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
 import InboxIcon from '@mui/icons-material/Inbox';
 import MailIcon from '@mui/icons-material/Mail';
+import Board from '../components/Board';
+import UserProfileCard from '../components/ProfileCard';
+import BoardList from '../components/BoardSelect';
 
-const drawerWidth = 240;
+const drawerWidth = 190;
 
 const AppBar = styled(MuiAppBar)(({ theme }) => ({
     width: `calc(100% - ${drawerWidth}px)`,
@@ -28,8 +31,7 @@ const AppBar = styled(MuiAppBar)(({ theme }) => ({
 
 const MainStyled = styled('main')(({ theme }) => ({
     flexGrow: 1,
-    padding: theme.spacing(3),
-    marginTop: theme.spacing(8),
+    marginTop: theme.spacing(6),
     marginLeft: drawerWidth,
     height: '100vh',
     overflow: 'auto',
@@ -52,7 +54,7 @@ const Main: React.FC = () => {
                 setSelectedComponent(<p>Bem-vindo ao componente!</p>);
                 break;
             case 1:
-                setSelectedComponent(<p>Conteúdo Retro</p>);
+                setSelectedComponent(<BoardList/>);
                 break;
             default:
                 setSelectedComponent(<p>Conteúdo padrão</p>);
@@ -67,8 +69,8 @@ const Main: React.FC = () => {
             flexDirection: 'column',
         }}>
             <CssBaseline />
-            <AppBar position="fixed">
-                <Toolbar>
+            <AppBar position="fixed" >
+                <Toolbar sx={{minHeight:'50px !important'}}>
                     {/* <IconButton
                         color="inherit"
                         aria-label="open drawer"
@@ -98,8 +100,15 @@ const Main: React.FC = () => {
                     {/* <IconButton>
                         <ChevronLeftIcon />
                     </IconButton> */}
+                    <UserProfileCard
+                        avatarUrl="https://example.com/avatar.jpg"
+                        nickname="Gamer123"
+                        level={5}
+                        experience={320}
+                        maxExperience={500}
+                    />
                 </DrawerHeader>
-                <Divider />
+                {/* <Divider /> */}
                 <List>
                     {['Bem Vindo', 'Retro'].map((text, index) => (
                         <ListItem key={text} disablePadding>
