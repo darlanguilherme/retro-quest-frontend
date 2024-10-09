@@ -2,8 +2,8 @@ import React, { createContext, ReactNode, useContext, useState, useEffect } from
 
 interface AuthContextType {
   isAuthenticated: boolean;
-  login: (username: string, password: string) => Promise<void>;
-  logout: () => void;
+  // login: (username: string, password: string) => Promise<void>;
+  checkAuth: () => void;
   loading: boolean;
   error: string | null;
 }

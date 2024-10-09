@@ -10,38 +10,52 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
     padding: theme.spacing(1),
     width: '100%',
     height: '100%',
-    boxShadow:'none'
-  }));
+    boxShadow: 'none'
+}));
 
 // Estilização da barra de experiência
 const ExperienceBar = styled(LinearProgress)(({ theme }) => ({
-  width: '100%',
-  marginTop: theme.spacing(1),
+    width: '100%',
+    marginTop: theme.spacing(1),
 }));
 
-const UserProfileCard = ({ avatarUrl, nickname, level, experience, maxExperience }: { avatarUrl: string; nickname: string; level: number; experience: number; maxExperience: number }) => {
-  // Cálculo do progresso da barra de experiência
-  const experiencePercentage = (experience / maxExperience) * 100;
+const UserProfileCard = ({
+    avatarSrc,
+    nickname,
+    level,
+    experience,
+    maxExperience,
+    coins // Nova propriedade
+}: {
+    avatarSrc: string;
+    nickname: string;
+    level: number;
+    experience: number;
+    maxExperience: number;
+    coins: number; // Nova propriedade
+}) => {
+    // Cálculo do progresso da barra de experiência
+    const experiencePercentage = (experience / maxExperience) * 100;
 
-  return (
-    <StyledPaper>
-      <Avatar src={avatarUrl} sx={{ width: 80, height: 80, mb: 2 }} />
-      <Typography variant="h6" component="div" gutterBottom>
-        {nickname}
-      </Typography>
-      <Typography variant="body2" color="text.secondary">
-        Level {level}
-      </Typography>
-      <ExperienceBar
-        variant="determinate"
-        value={experiencePercentage}
-        sx={{ mt: 1 }}
-      />
-      <Typography variant="caption" color="text.secondary">
-        {experience} / {maxExperience} XP
-      </Typography>
-    </StyledPaper>
-  );
+    return (
+        <StyledPaper>
+            <Avatar src={'/images/' + avatarSrc} sx={{ width: 80, height: 80, mb: 2 }} />
+            <Typography variant="h6" sx={{ textAlign: 'center' }} component="div" gutterBottom>
+                {nickname}
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+                Level {level} | Coins: {coins}
+            </Typography>
+            <ExperienceBar
+                variant="determinate"
+                value={experiencePercentage}
+                sx={{ mt: 1 }}
+            />
+            <Typography variant="caption" color="text.secondary">
+                {experience} / {maxExperience} XP
+            </Typography>
+        </StyledPaper>
+    );
 };
 
 export default UserProfileCard;
