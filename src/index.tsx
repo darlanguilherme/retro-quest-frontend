@@ -10,10 +10,25 @@ import { ToastContainer } from 'react-toastify';
 
 const theme = createTheme({
   typography: {
-    // fontFamily: 'Cheese Matcha, Arial, sans-serif',
+    fontFamily: 'Cheese Matcha, Arial, sans-serif',
     // fontFamily: 'Happy Paradise, Arial, sans-serif',
-    fontFamily: 'Hey Comic, Arial, sans-serif',
+    // fontFamily: 'Hey Comic, Arial, sans-serif',
+    // fontFamily: 'nulshock-bd.otf, Arial, sans-serif',
+    // fontFamily: 'KGBlankSpaceSketch.otf, Arial, sans-serif',
   },
+  components: {
+    MuiButton: {
+        styleOverrides: {
+            root: {
+                backgroundColor: '#5478F0', // Cor primária
+                color: '#ffffff', // Cor do texto
+                '&:hover': {
+                    backgroundColor: '#115293', // Cor ao passar o mouse
+                },
+            },
+        },
+    },
+},
 });
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);

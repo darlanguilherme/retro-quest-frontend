@@ -1,13 +1,12 @@
 import Column from './Column';
 import React, { useEffect, useState } from 'react';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { Box, Container, Divider, Typography, IconButton, CircularProgress } from '@mui/material';
+import { Box, Container, Divider, Typography, IconButton, CircularProgress, Button } from '@mui/material';
 
 import { getBoardDetailsById } from '../services/apiService';
-import { joinBoard, onCardAdded, onCardLiked, addCardWS, socket, likeCard } from '../socket/socket.service';
-import { idText } from 'typescript';
-import { title } from 'process';
+import { joinBoard, onCardAdded, onCardLiked, onBoardFinished, addCardWS, finishBoardWS, socket, likeCard } from '../socket/socket.service';
 import { BoardDTO, CardDTO } from '../dtos/entitys.interface';
+import { useUser } from '../context/UserContext';
 
 interface BoardProps {
     board: any;
@@ -17,7 +16,7 @@ interface BoardProps {
 interface Card {
     text: string;
     likes: number;
-    userLiked: boolean; // Adicionado para rastrear se o usuário curtiu
+    userLiked: boolean;
 }
 
 const Board: React.FC<BoardProps> = ({ board, onBack }) => {
@@ -27,6 +26,7 @@ const Board: React.FC<BoardProps> = ({ board, onBack }) => {
         { title: 'O que podemos melhorar?', id: 3 },
     ]);
 
+    const { user, setUser } = useUser();
     const [boardData, setBoardData] = useState<BoardDTO>();
     const [loading, setLoading] = useState(false); // Estado de loading
 
@@ -40,11 +40,6 @@ const Board: React.FC<BoardProps> = ({ board, onBack }) => {
             socket.off('cardLiked');
         };
     }, []);
-
-    // useEffect(() => {
-    //     console.log(`Carregando dados para o board ${board.id}`);
-    //     setBoardData(board);
-    // }, [board]);
 
     // Junta-se ao board e configura o listener para novos cards
     useEffect(() => {
@@ -72,8 +67,6 @@ const Board: React.FC<BoardProps> = ({ board, onBack }) => {
                 });
             });
 
-
-
             onCardLiked((card: CardDTO) => {
                 console.log('New card Liked:', card);
                 setBoardData(prevBoardData => prevBoardData ? {
@@ -82,9 +75,15 @@ const Board: React.FC<BoardProps> = ({ board, onBack }) => {
                 } : prevBoardData);
             });
 
-
+            onBoardFinished((boardId: number) => {
+                console.log('onBoardFinished', boardId);
+                setBoardData(prevBoardData => prevBoardData ? {
+                    ...prevBoardData,
+                    isActive: false
+                } : prevBoardData);
+            });
         }
-    }, [boardData]); // Escuta mudanças em boardData
+    }, [boardData]);
 
     const getBoardDetails = async () => {
         setLoading(true);
@@ -110,6 +109,12 @@ const Board: React.FC<BoardProps> = ({ board, onBack }) => {
         }
     };
 
+    const handleFinishRetro = () => {
+        if (boardData?.id) {
+            finishBoardWS(boardData?.id);
+        }
+    };
+
     const userLikedBefore = (cardId: number, userId: number) => {
         // Verifica se o usuário já curtiu o card
         return boardData?.cards?.some(
@@ -119,16 +124,17 @@ const Board: React.FC<BoardProps> = ({ board, onBack }) => {
 
     const updateCardLikes = (cardId: number, userId: number) => {
         console.log(`Like para o card ${cardId} pelo usuário ${userId}`);
-        // if (userLikedBefore(cardId, userId)) {
-        //     console.log('Usuário já curtiu antes');
-        //     return;
-        // }
         likeCard(cardId, userId);
     };
 
+    // const handleFinishRetro = async () => {
+    //     console.log('Finalizando a retro');
+    //     await finishRetro(boardData?.id);
+    // }
+
     return (
         <Container sx={{ paddingRight: '0px !important', paddingLeft: '0px !important', margin: 0, height: 'calc(100% - 50px)', width: '100%', maxWidth: 'none !important' }}>
-            {loading ? ( // Exibir o loading se estiver carregando
+            {loading ? (
                 <Box sx={{ display: 'flex', justifyContent: 'center', padding: 2 }}>
                     <CircularProgress />
                 </Box>
@@ -148,12 +154,22 @@ const Board: React.FC<BoardProps> = ({ board, onBack }) => {
                     <Typography variant="h5" sx={{ marginBottom: 0 }} gutterBottom>
                         {`${boardData?.id}: ${boardData?.title}`}
                     </Typography>
+                    {user.role === 'ADMIN' && (
+                        <Button
+                            variant="contained"
+                            onClick={handleFinishRetro}
+                            sx={{ marginLeft: 2 }}
+                            disabled={!boardData?.isActive}
+                        >
+                            Finalizar
+                        </Button>)}
                 </Box><Box sx={{ display: 'flex', height: '100%', justifyContent: 'space-around' }}>
                         {columns.map((column, columnIndex) => (
                             <React.Fragment key={columnIndex}>
                                 <Column
                                     title={column.title}
                                     cards={boardData?.cards?.filter(b => b.columnId === column.id) || []}
+                                    boardActive={boardData?.isActive}
                                     onAddCard={(text, userId) => addCard(userId, column.id, text)}
                                     onLikeCard={(cardId, userId) => updateCardLikes(cardId, userId)} />
                                 {columnIndex < columns.length - 1 && (

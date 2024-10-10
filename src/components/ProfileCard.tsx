@@ -1,8 +1,9 @@
 import React from 'react';
-import { Box, Typography, Avatar, LinearProgress, Paper } from '@mui/material';
+import { Box, Typography, Avatar, LinearProgress, Paper, IconButton } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import RefreshIcon from '@mui/icons-material/Refresh'; // Ícone de refresh
+import { calculateProgressBar } from '../utils/Utils';
 
-// Estilização do contêiner principal
 const StyledPaper = styled(Paper)(({ theme }) => ({
     display: 'flex',
     flexDirection: 'column',
@@ -10,11 +11,14 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
     padding: theme.spacing(1),
     width: '100%',
     height: '100%',
-    boxShadow: 'none'
+    boxShadow: 'none',
+    position: 'relative'
 }));
 
-// Estilização da barra de experiência
 const ExperienceBar = styled(LinearProgress)(({ theme }) => ({
+    '& .MuiLinearProgress-bar': {
+        backgroundColor: '#5478F0',
+    },
     width: '100%',
     marginTop: theme.spacing(1),
 }));
@@ -25,21 +29,39 @@ const UserProfileCard = ({
     level,
     experience,
     maxExperience,
-    coins // Nova propriedade
+    coins,
+    onRefresh
 }: {
     avatarSrc: string;
     nickname: string;
     level: number;
     experience: number;
     maxExperience: number;
-    coins: number; // Nova propriedade
+    coins: number;
+    onRefresh: () => void;
 }) => {
-    // Cálculo do progresso da barra de experiência
-    const experiencePercentage = (experience / maxExperience) * 100;
-
     return (
         <StyledPaper>
-            <Avatar src={'/images/' + avatarSrc} sx={{ width: 80, height: 80, mb: 2 }} />
+            <Box sx={{ position: 'relative' }}>
+                <Avatar src={'/images/' + avatarSrc} sx={{ width: 80, height: 80, mb: 2 }} />
+                <IconButton
+                    sx={{
+                        position: 'absolute',
+                        top: 60,
+                        right: -7,
+                        bgcolor: 'white',
+                        boxShadow: 1,
+                        '&:hover': {
+                            bgcolor: 'grey.200'
+                        },
+                        width: '30px',
+                        height: '30px',
+                    }}
+                    onClick={onRefresh}
+                >
+                    <RefreshIcon />
+                </IconButton>
+            </Box>
             <Typography variant="h6" sx={{ textAlign: 'center' }} component="div" gutterBottom>
                 {nickname}
             </Typography>
@@ -48,7 +70,7 @@ const UserProfileCard = ({
             </Typography>
             <ExperienceBar
                 variant="determinate"
-                value={experiencePercentage}
+                value={calculateProgressBar(experience)}
                 sx={{ mt: 1 }}
             />
             <Typography variant="caption" color="text.secondary">

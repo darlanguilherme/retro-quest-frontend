@@ -13,7 +13,7 @@ import ConfettiExplosion from 'react-confetti-explosion';
 import { toast } from 'react-toastify';
 
 const Reward: React.FC<any> = ({ userLevel, userName, userAvatar }) => {
-  const { user } = useUser();
+  const { user, setUser } = useUser();
   const [rewards, setRewards] = useState<any[]>([]);
   const [explosion, setExplosion] = useState(false);
   const [buttonDisabled, setButtonDisabled] = useState(false);
@@ -30,30 +30,22 @@ const Reward: React.FC<any> = ({ userLevel, userName, userAvatar }) => {
   const handleRedeem = async (rewardId: number) => {
     try {
       if (buttonDisabled) return;
-
       setButtonDisabled(true);
-      // setRewards((prev) =>
-      //   prev.map((reward) =>
-      //     reward.lvlRequired === lvlRequired && reward.unlocked
-      //       ? { ...reward, redeemed: true }
-      //       : reward
-      //   )
-      // );
 
-      const rewardRendeed = await rendeenReward(rewardId);
+      const response = await rendeenReward(rewardId);
 
-      if (!rewardRendeed) {
+      if (!response) {
         toast.error('Erro ao resgatar recompensa.');
         return;
       }
-      
+
       setRewards((prev) =>
         prev.map(({ id, ...rest }) =>
-          id === rewardId ? rewardRendeed : { id, ...rest }
+          id === rewardId ? response.reward : { id, ...rest }
         )
       );
+      setUser(response.user);
 
-      console.log('rewards:', rewards);
       toast.success('Recompensa resgatada com sucesso!');
       setExplosion(true);
     } catch (error) {

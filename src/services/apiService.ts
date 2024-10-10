@@ -14,162 +14,60 @@ export interface Data {
     name: string;
 }
 
-export const login = async (data: any): Promise<any> => {
+const getAuthHeaders = () => ({
+    headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+    },
+});
+
+const handleApiCall = async (call: () => Promise<any>): Promise<any> => {
     try {
-        const response = await api.post<any>('/auth/login', data);
+        const response = await call();
         return response.data;
     } catch (error) {
-        console.error('Erro ao enviar dados:', error);
+        console.error('Erro ao realizar a chamada de API:', error);
         throw error;
     }
 };
 
-export const createUser = async (data: any): Promise<Data> => {
-    try {
-        const response = await api.post<any>('/users', data);
-        return response.data;
-    } catch (error) {
-        console.error('Erro ao enviar dados:', error);
-        throw error;
-    }
-};
+export const login = (data: any): Promise<any> =>
+    handleApiCall(() => api.post('/auth/login', data));
 
-export const updateUser = async (data: any): Promise<Data> => {
-    try {
-        const token = localStorage.getItem('token');
+export const createUser = (data: any): Promise<Data> =>
+    handleApiCall(() => api.post('/users', data));
 
-        const response = await api.put<any>('/users', data, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        });
-        return response.data;
-    } catch (error) {
-        console.error('Erro ao enviar dados:', error);
-        throw error;
-    }
-};
+export const getUserById = (): Promise<Data> =>
+    handleApiCall(() => api.get(`/users`, getAuthHeaders()));
 
-export const getAvatarsUser = async (): Promise<any> => {
-    try {
-        const token = localStorage.getItem('token');
+export const updateUser = (data: any): Promise<Data> =>
+    handleApiCall(() => api.put('/users', data, getAuthHeaders()));
 
-        const response = await api.get<any>('/users/avatars', {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        });
-        return response.data;
-    } catch (error) {
-        console.error('Erro ao enviar dados:', error);
-        throw error;
-    }
-};
+export const getAvatarsUser = (): Promise<any> =>
+    handleApiCall(() => api.get('/users/avatars', getAuthHeaders()));
 
-export const getAvatarsShop = async (): Promise<any> => {
-    try {
-        const token = localStorage.getItem('token');
+export const getAvatarsShop = (): Promise<any> =>
+    handleApiCall(() => api.get('/users/avatarsShop', getAuthHeaders()));
 
-        const response = await api.get<any>('/users/avatarsShop', {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        });
-        return response.data;
-    } catch (error) {
-        console.error('Erro ao enviar dados:', error);
-        throw error;
-    }
-};
+export const getRewards = (): Promise<any> =>
+    handleApiCall(() => api.get('/users/rewards', getAuthHeaders()));
 
-export const getRewards = async (): Promise<any> => {
-    try {
-        const token = localStorage.getItem('token');
+export const getBoards = (): Promise<BoardDTO[]> =>
+    handleApiCall(() => api.get('/boards'));
 
-        const response = await api.get<any>('/users/rewards', {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        });
-        return response.data;
-    } catch (error) {
-        console.error('Erro ao enviar dados:', error);
-        throw error;
-    }
-};
+export const getBoardDetailsById = (id: number): Promise<BoardDTO> =>
+    handleApiCall(() => api.get(`/boards/${id}/details`));
 
-export const getBoards = async (): Promise<BoardDTO[]> => {
-    try {
-        const response = await api.get<BoardDTO[]>('/boards');
-        return response.data;
-    } catch (error) {
-        console.error('Erro ao buscar dados:', error);
-        throw error;
-    }
-};
+export const createBoard = (data: any): Promise<Data> =>
+    handleApiCall(() => api.post('/boards', data));
 
-export const getBoardDetailsById = async (id: number): Promise<BoardDTO> => {
-    try {
-        const response = await api.get<BoardDTO>(`/boards/${id}/details`);
-        return response.data;
-    } catch (error) {
-        console.error('Erro ao buscar dados:', error);
-        throw error;
-    }
-};
+export const purchaseAvatars = (ids: any): Promise<any> =>
+    handleApiCall(() => api.post('/users/purchaseAvatar', { avatarIds: ids }, getAuthHeaders()));
 
-export const createBoard = async (data: any): Promise<Data> => {
-    try {
-        const response = await api.post<any>('/boards', data);
-        return response.data;
-    } catch (error) {
-        console.error('Erro ao enviar dados:', error);
-        throw error;
-    }
-};
+export const rendeenReward = (rewardId: number): Promise<any> =>
+    handleApiCall(() => api.post('/users/rendeenReward', { rewardId }, getAuthHeaders()));
 
-export const purchaseAvatars = async (ids: any): Promise<any> => {
-    try {
-        const token = localStorage.getItem('token');
-        const response = await api.post<any>(`/users/purchaseAvatar`, { avatarIds: ids }, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        });
-        return response.data;
-    } catch (error) {
-        console.error('Erro ao buscar dados:', error);
-        throw error;
-    }
-};
+export const getUsersRanking = (): Promise<any> =>
+    handleApiCall(() => api.get('/users/ranking', getAuthHeaders()));
 
-export const rendeenReward = async (rewardId: number): Promise<any> => {
-    try {
-        const token = localStorage.getItem('token');
-        const response = await api.post<any>(`/users/rendeenReward`, { rewardId }, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        });
-        return response.data;
-    } catch (error) {
-        console.error('Erro ao buscar dados:', error);
-        throw error;
-    }
-};
-
-export const getUsersRanking = async (): Promise<any> => {
-    try {
-        const token = localStorage.getItem('token');
-        const response = await api.get<any>(`/users/ranking`, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        });
-        return response.data;
-    } catch (error) {
-        console.error('Erro ao buscar dados:', error);
-        throw error;
-    }
-};
-
+export const finishRetro = (retroId: any): Promise<any> =>
+    handleApiCall(() => api.post('/boards/finish', { retroId }, getAuthHeaders()));

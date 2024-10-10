@@ -6,11 +6,12 @@ import { CardDTO, UserDTO } from '../dtos/entitys.interface';
 interface ColumnProps {
     title: string;
     cards: CardDTO[];
+    boardActive: boolean | undefined;
     onAddCard: (text: string, userId: number) => void;
     onLikeCard: (cardId: number, userId: number) => void;
 }
 
-const Column: React.FC<ColumnProps> = ({ title, cards, onAddCard, onLikeCard }) => {
+const Column: React.FC<ColumnProps> = ({ title, cards, boardActive, onAddCard, onLikeCard }) => {
     const [newCardDescription, setNewCardDescription] = useState('');
     const [user, setUser] = useState<UserDTO | null>(null);
 
@@ -103,6 +104,7 @@ const Column: React.FC<ColumnProps> = ({ title, cards, onAddCard, onLikeCard }) 
                                     color: user && card.likes?.some(c => c.userId === user.id) ? 'blue' : 'gray',
                                     marginLeft: 1,
                                 }}
+                                disabled={!boardActive}
                             >
                                 <ThumbUpIcon />
                             </IconButton>
@@ -130,12 +132,14 @@ const Column: React.FC<ColumnProps> = ({ title, cards, onAddCard, onLikeCard }) 
                     size="small"
                     fullWidth
                     inputProps={{ maxLength: 120 }}
+                    disabled={!boardActive}
                 />
                 <Button
                     onClick={handleAddCard}
                     variant="contained"
                     color="primary"
                     sx={{ marginTop: 1 }}
+                    disabled={!boardActive}
                 >
                     Adicionar
                 </Button>

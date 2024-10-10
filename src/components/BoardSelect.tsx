@@ -17,8 +17,10 @@ import {
 } from '@mui/material';
 import Board from './Board';  // Importe seu componente Board
 import { getBoards, createBoard } from '../services/apiService';
+import { useUser } from '../context/UserContext';
 
 const BoardList: React.FC = () => {
+    const { user, setUser } = useUser();
     const [boardData, setBoardData] = useState<any[]>([]);
     const [selectedBoard, setSelectedBoard] = useState<any | null>(null);
     const [currentPage, setCurrentPage] = useState(1);
@@ -27,7 +29,7 @@ const BoardList: React.FC = () => {
     const [newBoardTitle, setNewBoardTitle] = useState(''); // Para o título da nova retro
     const [loading, setLoading] = useState(false);
 
-    const itemsPerPage = Math.floor(window.innerHeight / 60);
+    const itemsPerPage = 10;
 
     useEffect(() => {
         getBoardData();
@@ -107,16 +109,18 @@ const BoardList: React.FC = () => {
                 <Typography variant="h5" sx={{ marginBottom: 0 }} gutterBottom>
                     Selecione a Retro
                 </Typography>
-                <Button
-                    variant="contained"
-                    onClick={handleOpenModal}
-                    sx={{ marginLeft: 2 }} // Espaço à esquerda do botão
-                >
-                    Nova retro
-                </Button>
+                {user.role === 'ADMIN' && (
+                    <Button
+                        variant="contained"
+                        onClick={handleOpenModal}
+                        sx={{ marginLeft: 2 }}
+                    >
+                        Nova retro
+                    </Button>)
+                }
             </Box>
 
-            {loading ? ( // Exibir o loading se estiver carregando
+            {loading ? (
                 <Box sx={{ display: 'flex', justifyContent: 'center', padding: 2 }}>
                     <CircularProgress />
                 </Box>

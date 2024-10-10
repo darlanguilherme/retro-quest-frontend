@@ -11,10 +11,6 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import Divider from '@mui/material/Divider';
-import InboxIcon from '@mui/icons-material/Inbox';
-import MailIcon from '@mui/icons-material/Mail';
-import Board from '../components/Board';
 import UserProfileCard from '../components/ProfileCard';
 import BoardList from '../components/BoardSelect';
 import Profile from '../components/Profile';
@@ -30,7 +26,10 @@ import StarIcon from '@mui/icons-material/Star';
 import StoreIcon from '@mui/icons-material/Store';
 import PersonIcon from '@mui/icons-material/Person';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+
+import { getUserById } from '../services/apiService';
 import { formatLvl, getMaxLevel } from '../utils/Utils';
+import { toast } from 'react-toastify';
 
 type IconKey = 'home' | 'history' | 'leaderboard' | 'star' | 'store' | 'person' | 'exit_to_app';
 
@@ -115,16 +114,27 @@ const Main: React.FC = () => {
         }
     };
 
+    const getUserInformation = async () => {
+        try {
+            let user = await getUserById();
+            setUser(user);
+            toast.success('Perfil atualizado com sucesso!');
+        } catch (error) {
+            toast.error('Erro ao atualizar perfil.');
+
+        }
+    }
+
     return (
         <Box sx={{
             height: '100vh',
             display: 'flex',
             flexDirection: 'column',
             backgroundColor: '#f5f5f5'
-        }}>
+        }} >
             <CssBaseline />
             <AppBar position="fixed" >
-                <Toolbar sx={{ minHeight: '50px !important' }}>
+                <Toolbar sx={{ minHeight: '50px !important', backgroundColor:'#5478F0' }}>
                     {/* <IconButton
                         color="inherit"
                         aria-label="open drawer"
@@ -133,7 +143,7 @@ const Main: React.FC = () => {
                     >
                         <MenuIcon />
                     </IconButton> */}
-                    <Typography variant="h4" noWrap component="div" sx={{ flexGrow: 1, textAlign: 'center' }}>
+                    <Typography variant="h4" noWrap component="div" sx={{ fontSize:'31px',flexGrow: 1, textAlign: 'center' }}>
                         RetroQuest
                     </Typography>
                 </Toolbar>
@@ -150,20 +160,18 @@ const Main: React.FC = () => {
                 variant="permanent"
                 anchor="left"
             >
-                <DrawerHeader sx={{minHeight: '205px !important'}}>
-                    {/* <IconButton>
-                        <ChevronLeftIcon />
-                    </IconButton> */}
+                <DrawerHeader sx={{ minHeight: '205px !important' }}>
+
                     <UserProfileCard
                         avatarSrc={user.avatar?.path}
                         nickname={user.nickname}
                         level={formatLvl(user.experience)}
                         experience={user.experience}
                         maxExperience={getMaxLevel(user.experience)}
-                        coins={user.coins} // Adicionando a quantidade de moedas
+                        coins={user.coins}
+                        onRefresh={() => getUserInformation()}
                     />
                 </DrawerHeader>
-                {/* <Divider /> */}
                 <List>
                     {menuItems.map((item, index) => (
                         <ListItem key={item.name} disablePadding>
@@ -180,7 +188,7 @@ const Main: React.FC = () => {
             <MainStyled sx={{ marginTop: '50px !important' }}>
                 {selectedComponent}
             </MainStyled>
-        </Box>
+        </Box >
     );
 }
 

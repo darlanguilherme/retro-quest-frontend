@@ -2,12 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Box, Typography, List, ListItem, ListItemText, Avatar, LinearProgress } from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
 import { getUsersRanking } from '../services/apiService';
-import { formatLvl, getMaxLevel } from '../utils/Utils';
+import { formatLvl, calculateProgressBar } from '../utils/Utils';
 import { useUser } from '../context/UserContext';
-
-const calculateProgress = (experience: number) => {
-  return (experience / getMaxLevel(experience)) * 100;
-};
 
 const Ranking = () => {
   interface User {
@@ -62,7 +58,7 @@ const Ranking = () => {
                   marginRight: 2,
                   width: 60,
                   height: 60,
-                  border: userRanking.avatar?.id === user.avatarId ? '3px solid red' : 'none'
+                  border: userRanking.avatar?.id === user.avatarId ? '2px solid red' : 'none'
                 }}
               />
               <ListItemText
@@ -77,7 +73,12 @@ const Ranking = () => {
                 secondary={
                   <Box>
                     <Typography variant="body2">{`Level: ${formatLvl(userRanking.experience)}`}</Typography>
-                    <LinearProgress variant="determinate" value={calculateProgress(userRanking.experience)} />
+                    <LinearProgress sx={{
+                      // backgroundColor: 'black',
+                      '& .MuiLinearProgress-bar': {
+                        bgcolor: '#5478F0', // Cor da barra de progresso
+                      },
+                    }} variant="determinate" value={calculateProgressBar(userRanking.experience)} />
                   </Box>
                 }
               />

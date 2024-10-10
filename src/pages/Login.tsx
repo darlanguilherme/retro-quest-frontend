@@ -83,11 +83,15 @@ const LoginForm = () => {
     <Box
       sx={{
         display: 'flex',
+        flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        height: '100vh'
+        height: '80vh'
       }}
     >
+      <Typography variant="h3" gutterBottom sx={{paddingBottom: 3}}>
+        RetroQuest
+      </Typography>
       <Paper elevation={3} sx={{ padding: 2, width: 300 }}>
         {!isCreatingUser ? (
           <>
