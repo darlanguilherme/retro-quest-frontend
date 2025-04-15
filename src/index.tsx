@@ -10,7 +10,9 @@ import { ToastContainer } from 'react-toastify';
 
 const theme = createTheme({
   typography: {
-    fontFamily: 'Cheese Matcha, Arial, sans-serif',
+    // fontFamily: 'Cheese Matcha, Arial, sans-serif',
+    // fontFamily: 'American Captain, Arial, sans-serif',
+    fontFamily: 'Coolvetica, Arial, sans-serif',
     // fontFamily: 'Happy Paradise, Arial, sans-serif',
     // fontFamily: 'Hey Comic, Arial, sans-serif',
     // fontFamily: 'nulshock-bd.otf, Arial, sans-serif',

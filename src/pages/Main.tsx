@@ -31,11 +31,13 @@ import { getUserById } from '../services/apiService';
 import { formatLvl, getMaxLevel } from '../utils/Utils';
 import { toast } from 'react-toastify';
 
-type IconKey = 'home' | 'history' | 'leaderboard' | 'star' | 'store' | 'person' | 'exit_to_app';
+type IconKey =
+    // 'home' |
+    'history' | 'leaderboard' | 'star' | 'store' | 'person' | 'exit_to_app';
 
 const menuItems: { name: string, icon: IconKey }[] = [
-    { name: 'Bem Vindo', icon: 'home' },
-    { name: 'Retro', icon: 'history' },
+    // { name: 'Bem Vindo', icon: 'home' },
+    { name: 'Retros', icon: 'history' },
     { name: 'Ranking', icon: 'leaderboard' },
     { name: 'Recompensas', icon: 'star' },
     { name: 'Loja', icon: 'store' },
@@ -44,7 +46,7 @@ const menuItems: { name: string, icon: IconKey }[] = [
 ];
 
 const iconMap: Record<IconKey, JSX.Element> = {
-    home: <HomeIcon />,
+    // home: <HomeIcon />,
     history: <HistoryIcon />,
     leaderboard: <LeaderboardIcon />,
     star: <StarIcon />,
@@ -84,7 +86,8 @@ const Main: React.FC = () => {
     const { user, setUser } = useUser();
     const [selectedComponent, setSelectedComponent] = React.useState<JSX.Element | null>(null);
 
-    const handleListItemClick = (index: number) => {
+    const handleListItemClick = (i: number) => {
+        let index = i + 1;
         switch (index) {
             case 0:
                 setSelectedComponent(<p>Bem-vindo ao componente!</p>);
@@ -134,7 +137,7 @@ const Main: React.FC = () => {
         }} >
             <CssBaseline />
             <AppBar position="fixed" >
-                <Toolbar sx={{ minHeight: '50px !important', backgroundColor:'#5478F0' }}>
+                <Toolbar sx={{ minHeight: '50px !important', backgroundColor: '#5478F0' }}>
                     {/* <IconButton
                         color="inherit"
                         aria-label="open drawer"
@@ -143,7 +146,7 @@ const Main: React.FC = () => {
                     >
                         <MenuIcon />
                     </IconButton> */}
-                    <Typography variant="h4" noWrap component="div" sx={{ fontSize:'31px',flexGrow: 1, textAlign: 'center' }}>
+                    <Typography variant="h4" noWrap component="div" sx={{ fontSize: '31px', flexGrow: 1, textAlign: 'center' }}>
                         RetroQuest
                     </Typography>
                 </Toolbar>

@@ -2,9 +2,26 @@
 import { createGlobalStyle } from 'styled-components';
 
 const GlobalStyle = createGlobalStyle`
+// * {
+//   font-family: 'American Captain', sans-serif; /* Aplica a fonte globalmente */
+//   letter-spacing: 0.07em; /* Ajuste o valor conforme necessário */
+// }
+
     @font-face {
-      font-family: 'Cheese Matcha';
-      src: url('/fonts/Cheese-Matcha.otf') format('opentype');
+      font-family: 'Coolvetica';
+      src: url('/fonts/coolvetica-rg.otf') format('opentype');
+      font-style: normal;
+    }
+
+    @font-face {
+      font-family: 'Titania Regular';
+      src: url('/fonts/Titania-Regular.ttf') format('opentype');
+      font-style: normal;
+    }
+
+    @font-face {
+      font-family: 'American Captain';
+      src: url('/fonts/American-Captain.otf') format('opentype');
       font-style: normal;
     }
 
