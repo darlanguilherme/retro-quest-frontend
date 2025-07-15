@@ -39,6 +39,9 @@ export const createUser = (data: any): Promise<Data> =>
 export const getUserById = (): Promise<Data> =>
     handleApiCall(() => api.get(`/users`, getAuthHeaders()));
 
+export const getAllUsers = (): Promise<any> =>
+    handleApiCall(() => api.get(`/users/all`, getAuthHeaders()));
+
 export const updateUser = (data: any): Promise<Data> =>
     handleApiCall(() => api.put('/users', data, getAuthHeaders()));
 
@@ -71,3 +74,6 @@ export const getUsersRanking = (): Promise<any> =>
 
 export const finishRetro = (retroId: any): Promise<any> =>
     handleApiCall(() => api.post('/boards/finish', { retroId }, getAuthHeaders()));
+
+export const voteMvp = (data: any): Promise<any> =>
+    handleApiCall(() => api.post('/boards/voteMvp', data, getAuthHeaders()));

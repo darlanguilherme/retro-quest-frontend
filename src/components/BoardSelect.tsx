@@ -113,7 +113,7 @@ const BoardList: React.FC = () => {
                     <Button
                         variant="contained"
                         onClick={handleOpenModal}
-                        sx={{ marginLeft: 2 }}
+                        sx={{ marginLeft: 2, height: '30px' }}
                     >
                         Nova retro
                     </Button>)

@@ -13,8 +13,10 @@ export interface BoardDTO {
     id: number;
     title: string;
     isActive: boolean;
-    cards: CardDTO[]; // Para incluir informações de cards se necessário
-    createdAt: string; // Usar string para datas no formato ISO
+    mvpSelected: string;
+    cards: CardDTO[]; 
+    mvps: any;
+    createdAt: string;
 }
 
 // Card DTO
